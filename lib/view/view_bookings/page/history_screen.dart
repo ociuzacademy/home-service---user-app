@@ -3,6 +3,7 @@ import 'package:home_ease/view/payment_details_view/page/details_view.dart';
 import 'package:home_ease/view/view_bookings/model/booked_model.dart';
 import 'package:home_ease/view/view_bookings/service/booked_service.dart';
 import 'package:home_ease/view/view_bookings/service/completed_service.dart';
+import 'package:home_ease/view/view_bookings/service/not_arrived_service.dart';
 import 'package:intl/intl.dart';
 
 class BookingScreen extends StatelessWidget {
@@ -30,7 +31,7 @@ class BookingScreen extends StatelessWidget {
 
   Future<void> _handleNotArrived(BuildContext context, int bookingId) async {
     try {
-      final responseMessage = await completedService(
+      final responseMessage = await notArrivedService(
         booking_id: bookingId.toString(),
       );
 
@@ -63,9 +64,18 @@ class BookingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Booking Status'),
+        title: Text(
+          'Booking Status',
+          style: TextStyle(
+            fontSize: screenWidth * 0.05, // Responsive font size
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         backgroundColor: Colors.blueAccent,
       ),
       body: FutureBuilder<List<BookedServiceModel>>(
@@ -78,12 +88,19 @@ class BookingScreen extends StatelessWidget {
           if (snapshot.hasError) {
             return Center(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset('assets/images/noResponse.jpg'),
+                  Image.asset(
+                    'assets/images/noResponse.jpg',
+                    width: screenWidth * 0.5, // Responsive image width
+                  ),
+                  SizedBox(height: screenHeight * 0.02),
                   Text(
                     "Error: ${snapshot.error}",
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.04, // Responsive font size
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
@@ -91,7 +108,14 @@ class BookingScreen extends StatelessWidget {
           }
 
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text("No services found"));
+            return Center(
+              child: Text(
+                "No services found",
+                style: TextStyle(
+                  fontSize: screenWidth * 0.04, // Responsive font size
+                ),
+              ),
+            );
           }
 
           final bookings = snapshot.data!;
@@ -104,111 +128,151 @@ class BookingScreen extends StatelessWidget {
               return GestureDetector(
                 onTap: () {},
                 child: Card(
-                  margin: const EdgeInsets.all(10),
+                  margin: EdgeInsets.all(screenWidth * 0.03), // Responsive margin
                   elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(15),
+                    padding: EdgeInsets.all(screenWidth * 0.04), // Responsive padding
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'Date: ${booking.bookingDate?.toLocal().toString().split(' ')[0]}',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.04, // Responsive font size
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        const SizedBox(height: 5),
+                        SizedBox(height: screenHeight * 0.01),
                         Text(
                           'Price: ${booking.serviceDetails?.price}',
-                          style: const TextStyle(
-                              fontSize: 16, color: Colors.black),
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.04, // Responsive font size
+                            color: Colors.black,
+                          ),
                         ),
-                        const SizedBox(height: 5),
+                        SizedBox(height: screenHeight * 0.01),
                         Text(
                           'Service: ${booking.serviceDetails?.serviceName}',
-                          style: const TextStyle(
-                              fontSize: 16, color: Colors.black),
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.04, // Responsive font size
+                            color: Colors.black,
+                          ),
                         ),
-                        const SizedBox(height: 5),
+                        SizedBox(height: screenHeight * 0.01),
                         Text(
                           'Date: ${booking.bookingDate != null ? DateFormat('yyyy-MM-dd').format(booking.bookingDate!) : 'N/A'}',
-                          style: const TextStyle(
-                              fontSize: 16, color: Colors.black),
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.04, // Responsive font size
+                            color: Colors.black,
+                          ),
                         ),
-                        const SizedBox(height: 5),
+                        SizedBox(height: screenHeight * 0.01),
                         Text(
                           'Start Time: ${booking.slotStartTime}',
-                          style: const TextStyle(
-                              fontSize: 16, color: Colors.black),
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.04, // Responsive font size
+                            color: Colors.black,
+                          ),
                         ),
-                        const SizedBox(height: 5),
+                        SizedBox(height: screenHeight * 0.01),
                         Text(
                           'End Time: ${booking.slotEndTime}',
-                          style: const TextStyle(
-                              fontSize: 16, color: Colors.black),
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.04, // Responsive font size
+                            color: Colors.black,
+                          ),
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: screenHeight * 0.02),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 15),
+                              padding: EdgeInsets.symmetric(
+                                vertical: screenHeight * 0.01,
+                                horizontal: screenWidth * 0.03,
+                              ),
                               decoration: BoxDecoration(
                                 color: getStatusColor(booking.status ?? ''),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(
                                 booking.status ?? '',
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: screenWidth * 0.035, // Responsive font size
+                                ),
                               ),
                             ),
                             if (booking.status?.toLowerCase() == 'ongoing')
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.green),
+                                  backgroundColor: Colors.green,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: screenWidth * 0.04,
+                                    vertical: screenHeight * 0.01,
+                                  ),
+                                ),
                                 onPressed: () =>
                                     _handleCompleted(context, booking.id!),
-                                child: const Text(
+                                child: Text(
                                   'Completed',
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: screenWidth * 0.035, // Responsive font size
+                                  ),
                                 ),
                               ),
                             if (booking.status?.toLowerCase() == 'booked')
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.red),
+                                  backgroundColor: Colors.red,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: screenWidth * 0.04,
+                                    vertical: screenHeight * 0.01,
+                                  ),
+                                ),
                                 onPressed: () =>
                                     _handleNotArrived(context, booking.id!),
-                                child: const Text(
+                                child: Text(
                                   'Not Arrived',
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: screenWidth * 0.035, // Responsive font size
+                                  ),
                                 ),
                               ),
                             if (booking.status?.toLowerCase() == 'completed')
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.green,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: screenWidth * 0.04,
+                                    vertical: screenHeight * 0.01,
+                                  ),
                                 ),
                                 onPressed: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => PaymentDetails(booking_id: booking.id!.toString(), 
-                                      service_name: booking.serviceDetails!.serviceName!, 
-                                      visiting_date: booking.bookingDate!.toString(), 
-                                      price: booking.serviceDetails!.price!.toString(),),
+                                      builder: (context) => PaymentDetails(
+                                        booking_id: booking.id!.toString(),
+                                        service_name: booking.serviceDetails!.serviceName!,
+                                        visiting_date: booking.bookingDate!.toString(),
+                                        price: booking.serviceDetails!.price!.toString(),
+                                      ),
                                     ),
                                   );
-                                }, // Fixed this parenthesis and comma here!
-
-                                child: const Text(
+                                },
+                                child: Text(
                                   'Make Payment',
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: screenWidth * 0.035, // Responsive font size
+                                  ),
                                 ),
                               ),
                           ],

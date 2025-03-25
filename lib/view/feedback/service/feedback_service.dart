@@ -11,7 +11,7 @@ Future<FeedbackModel> userFeedbackService({
 }) async {
   try {
     Map<String, dynamic> param = {
-      "user": '7',
+      "user_id": '7',
       "rating": rating,
       "review_text" :feedback,
       "booking_id" :booking_id,

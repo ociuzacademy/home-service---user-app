@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:home_ease/view/feedback/service/feedback_service.dart';
+import 'package:home_ease/view/home.dart';
 
 class FeedbackScreen extends StatefulWidget {
   final String  booking_id;
@@ -32,7 +33,12 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Feedback submitted successfully!')),
           );
-          Navigator.pop(context);
+          Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HomePage(),
+                        ),
+                      );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(responseMessage.message ?? "Unknown error")),
@@ -78,7 +84,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.deepPurple),
+                      color: Color.fromARGB(255, 18, 136, 73)),
                 ),
                 const SizedBox(height: 10),
                 Center(
@@ -115,7 +121,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.deepPurple),
+                      color: Color.fromARGB(255, 56, 195, 93)),
                 ),
                 const SizedBox(height: 10),
                 Container(
@@ -124,7 +130,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.deepPurple.withOpacity(0.1),
+                        color: const Color.fromARGB(255, 72, 144, 71).withOpacity(0.1),
                         blurRadius: 10,
                         offset: const Offset(0, 5),
                       ),
@@ -157,7 +163,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 103, 6, 97),
+                      backgroundColor: const Color.fromARGB(255, 6, 106, 67),
                       padding: const EdgeInsets.symmetric(
                           horizontal: 40, vertical: 15),
                       shape: RoundedRectangleBorder(

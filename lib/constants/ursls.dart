@@ -18,7 +18,7 @@ class UserUrl {
   static const String status_not_arrived="$userbaseUrl/status_not_arrived/";
   static const String status_completed="$userbaseUrl/status_completed/";
   static const String upipayment="$userbaseUrl/upi_payment/";
-  static const String cardpayment="$userbaseUrl/upi_payment/";
+  static const String cardpayment="$userbaseUrl/card_payment/";
   static const String history="$userbaseUrl/user_booking_history/";
   static const String feedback="$userbaseUrl/reviews/";
   

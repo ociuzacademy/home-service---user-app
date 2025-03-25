@@ -5,8 +5,6 @@ import 'package:home_ease/view/all_history/service/history_service.dart';
 class HistoryPage extends StatelessWidget {
   const HistoryPage({super.key});
 
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +12,7 @@ class HistoryPage extends StatelessWidget {
         title: Text('Booking History'),
       ),
       body: FutureBuilder<List<ServiceHistoryModel>>(
-        future:historyService(),
+        future: historyService(), // Ensure this function returns Future<List<ServiceHistoryModel>>
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -28,7 +26,7 @@ class HistoryPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
-                    'assets/images/bad request.jpg',
+                    'assets/images/bad request.jpg', // Ensure the image path is correct
                     width: 300,
                   ),
                   Text(
@@ -60,7 +58,7 @@ class HistoryPage extends StatelessWidget {
                 margin: EdgeInsets.all(8.0),
                 child: ListTile(
                   title: Text(
-                    serviceDetails?.serviceName ?? 'No Service Name',
+                    serviceDetails?.serviceName?.toString() ?? 'No Service Name',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   subtitle: Column(
@@ -68,32 +66,32 @@ class HistoryPage extends StatelessWidget {
                     children: [
                       SizedBox(height: 4),
                       Text(
-                        'Date: ${booking.bookingDate?.toIso8601String().split('T')[0]}',
+                        'Date: ${booking.bookingDate?.toIso8601String().split('T')[0] ?? 'No Date'}',
                         style: TextStyle(fontSize: 14),
                       ),
                       SizedBox(height: 4),
                       Text(
-                        'Time: ${booking.slotStartTime} - ${booking.slotEndTime}',
+                        'Time: ${booking.slotStartTime ?? 'No Start Time'} - ${booking.slotEndTime ?? 'No End Time'}',
                         style: TextStyle(fontSize: 14),
                       ),
                       SizedBox(height: 4),
                       Text(
-                        'Status: ${booking.status}',
+                        'Status: ${booking.status?.toString() ?? 'No Status'}',
                         style: TextStyle(
                           fontSize: 14,
-                          color: booking.status == 'paid'
+                          color: booking.status == Status.PAID
                               ? Colors.green
                               : Colors.red,
                         ),
                       ),
                       SizedBox(height: 4),
                       Text(
-                        'Price: \$${serviceDetails?.price!.toStringAsFixed(2)}',
+                        'Price: ${serviceDetails?.price?.toStringAsFixed(2) ?? '0.00'}',
                         style: TextStyle(fontSize: 14),
                       ),
                       SizedBox(height: 4),
                       Text(
-                        'Platform Fee: \$${booking.platformFee}',
+                        'Platform Fee: ${booking.platformFee ?? '0.00'}',
                         style: TextStyle(fontSize: 14),
                       ),
                     ],

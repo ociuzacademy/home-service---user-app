@@ -26,9 +26,7 @@ class _UserLoginPageState extends State<UserLoginPage> {
 
   Future<void> _loginUser() async {
     if (_formKey.currentState?.validate() == true) {
-      setState(() {
-        _isLoading = true;
-      });
+      setState(() => _isLoading = true);
 
       try {
         final responseMessage = await userLoginService(
@@ -42,15 +40,12 @@ class _UserLoginPageState extends State<UserLoginPage> {
           );
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
-              builder: (context) => const HomePage(),
-            ),
+            MaterialPageRoute(builder: (context) => const HomePage()),
           );
         } else {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  content: Text(responseMessage.message ?? "Unknown error")),
+              SnackBar(content: Text(responseMessage.message ?? "Unknown error")),
             );
           }
         }
@@ -62,9 +57,7 @@ class _UserLoginPageState extends State<UserLoginPage> {
         }
       } finally {
         if (mounted) {
-          setState(() {
-            _isLoading = false;
-          });
+          setState(() => _isLoading = false);
         }
       }
     }
@@ -72,8 +65,8 @@ class _UserLoginPageState extends State<UserLoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 228, 237, 245),
@@ -108,132 +101,112 @@ class _UserLoginPageState extends State<UserLoginPage> {
                         ),
                       ),
                       SizedBox(height: screenHeight * 0.05),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Email',
-                          style: TextStyle(
-                            fontSize: screenWidth * 0.045,
-                            fontWeight: FontWeight.w500,
-                            color: Color.fromRGBO(41, 107, 239, 1),
-                          ),
-                        ),
-                      ),
-                      TextFormField(
-                        controller: _emailController,
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.email_outlined),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your email';
-                          } else if (!RegExp(
-                                  r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]')
-                              .hasMatch(value)) {
-                            return 'Enter a valid email';
-                          }
-                          return null;
-                        },
-                      ),
+                      _buildInputLabel('Email', screenWidth),
+                      _buildTextField(_emailController, Icons.email_outlined,
+                          'Please enter your email', 'Enter a valid email',
+                          regex: r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]'),
                       SizedBox(height: screenHeight * 0.018),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Password',
-                          style: TextStyle(
-                            fontSize: screenWidth * 0.045,
-                            fontWeight: FontWeight.w500,
-                            color: Color.fromRGBO(41, 107, 239, 1),
-                          ),
-                        ),
-                      ),
-                      TextFormField(
-                        controller: _passwordController,
-                        obscureText: _obscureText,
-                        decoration: InputDecoration(
-                          prefixIcon: const Icon(Icons.lock),
-                          border: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                          ),
-                          suffixIcon: IconButton(
-                            icon: Icon(_obscureText
-                                ? Icons.visibility_off
-                                : Icons.visibility),
-                            onPressed: () {
-                              setState(() {
-                                _obscureText = !_obscureText;
-                              });
-                            },
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
-                          } else if (value.length < 6) {
-                            return 'Password must be at least 6 characters';
-                          }
-                          return null;
-                        },
-                      ),
+                      _buildInputLabel('Password', screenWidth),
+                      _buildPasswordField(),
                       SizedBox(height: screenHeight * 0.03),
-                      SizedBox(
-                        width: screenWidth * 0.9,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color.fromRGBO(41, 107, 239, 1),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                          ),
-                          onPressed: _isLoading ? null : _loginUser,
-                          child: _isLoading
-                              ? const CircularProgressIndicator(
-                                  color: Colors.white)
-                              : const Text(
-                                  'Login',
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 252, 250, 250),
-                                    fontSize: 18,
-                                  ),
-                                ),
-                        ),
-                      ),
+                      _buildLoginButton(screenWidth),
                     ],
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.02),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Don't have an account?"),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const UserRegistration(),
-                          ),
-                        );
-                      },
-                      child: const Text(
-                        'Sign Up',
-                        style: TextStyle(
-                          color: Color.fromRGBO(41, 107, 239, 1),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                _buildSignupRow(),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildInputLabel(String text, double width) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: width * 0.045,
+          fontWeight: FontWeight.w500,
+          color: Color.fromRGBO(41, 107, 239, 1),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, IconData icon,
+      String emptyMessage, String invalidMessage,
+      {String? regex}) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        prefixIcon: Icon(icon),
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+        ),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) return emptyMessage;
+        if (regex != null && !RegExp(regex).hasMatch(value)) return invalidMessage;
+        return null;
+      },
+    );
+  }
+
+  Widget _buildPasswordField() {
+    return TextFormField(
+      controller: _passwordController,
+      obscureText: _obscureText,
+      decoration: InputDecoration(
+        prefixIcon: const Icon(Icons.lock),
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+        ),
+        suffixIcon: IconButton(
+          icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility),
+          onPressed: () => setState(() => _obscureText = !_obscureText),
+        ),
+      ),
+      validator: (value) => value == null || value.isEmpty
+          ? 'Please enter your password'
+          : value.length < 6
+              ? 'Password must be at least 6 characters'
+              : null,
+    );
+  }
+
+  Widget _buildLoginButton(double width) {
+    return SizedBox(
+      width: width * 0.9,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color.fromRGBO(41, 107, 239, 1),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        ),
+        onPressed: _isLoading ? null : _loginUser,
+        child: _isLoading
+            ? const CircularProgressIndicator(color: Colors.white)
+            : const Text('Login', style: TextStyle(fontSize: 18, color: Colors.white)),
+      ),
+    );
+  }
+
+  Widget _buildSignupRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text("Don't have an account?"),
+        TextButton(
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const UserRegistration()),
+          ),
+          child: const Text('Sign Up', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color.fromRGBO(41, 107, 239, 1))),
+        ),
+      ],
     );
   }
 }

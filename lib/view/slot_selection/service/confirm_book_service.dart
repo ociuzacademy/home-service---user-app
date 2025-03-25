@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:home_ease/constants/ursls.dart';
+//import 'package:home_ease/utils/preference_value.dart';
 import 'package:home_ease/view/slot_selection/model/confirm_book_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -11,7 +12,7 @@ Future<ConfirmBookMoldel> confirmCheckoutScreenService({
  
 }) async {
   try {
-   
+   //String userId = await PreferenceValues.getUserId();
     Map<String, dynamic> param = {
       "user_id": 7.toString(),
       "slot_id": slot_id, 

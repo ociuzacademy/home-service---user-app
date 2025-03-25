@@ -28,8 +28,8 @@ class UserPaymentState extends State<UserPayment> {
   final _formKey = GlobalKey<FormState>();
 
   final List<Map<String, String>> banks = [
-    {'name': 'Google Pay', 'image': 'assets/images/bad request.jpg'},
-    {'name': 'Credit/Debit Cards', 'image': 'assets/images/bad request.jpg'},
+    {'name': 'Google Pay', 'image': 'assets/icons/gpay.webp'},
+    {'name': 'Credit/Debit Cards', 'image': 'assets/icons/card.jpg'},
   ];
 
   @override

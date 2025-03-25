@@ -13,6 +13,11 @@ class ServicesListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final double padding = screenSize.width * 0.04;
+    final double containerHeight = screenSize.height * 0.15;
+    final double fontSize = screenSize.width * 0.05;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Services List'),
@@ -31,17 +36,17 @@ class ServicesListPage extends StatelessWidget {
             return Center(
               child: Text(
                 "Error: ${snapshot.error}",
-                style: const TextStyle(fontSize: 18, color: Colors.black54),
+                style: TextStyle(fontSize: fontSize * 0.8, color: Colors.black54),
               ),
             );
           }
 
           // Handle empty data state
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
                 "No items found",
-                style: TextStyle(fontSize: 18, color: Colors.black54),
+                style: TextStyle(fontSize: fontSize * 0.8, color: Colors.black54),
               ),
             );
           }
@@ -58,49 +63,52 @@ class ServicesListPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => GeolocatorRepairPage(
-                          service_id: item.id.toString()), //
+                          service_id: item.id.toString()),
                     ),
                   );
                 },
                 child: Container(
-                    margin: const EdgeInsets.all(10),
-                    padding: const EdgeInsets.all(19),
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [
-                          Colors.blueAccent,
-                          Color.fromARGB(255, 93, 181, 226)
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 5,
-                          offset: const Offset(2, 2),
-                        ),
+                  margin: EdgeInsets.all(padding * 0.3),
+                  padding: EdgeInsets.all(padding * 0.5),
+                  height: containerHeight,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [
+                        Colors.blueAccent,
+                        Color.fromARGB(255, 93, 181, 226)
                       ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 5,
+                        offset: const Offset(2, 2),
+                      ),
+                    ],
+                  ),
+                  child: Center(
                     child: Text(
-                      item.serviceName ?? "No Name", // Handle null serviceName
+                      item.serviceName ?? "No Name",
                       style: TextStyle(
-                        fontSize: 22, // Slightly larger font size
+                        fontSize: fontSize,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
-                        fontFamily:
-                            'Poppins', // Use a custom font (add the font to your pubspec.yaml)
-                        shadows: [
+                        fontFamily: 'Poppins',
+                        shadows: const [
                           Shadow(
-                            color: Colors.black26, // Add a subtle shadow
-                            offset: const Offset(2, 2),
+                            color: Colors.black26,
+                            offset: Offset(2, 2),
                             blurRadius: 4,
                           ),
                         ],
-                        letterSpacing: 1.2, // Add spacing between letters
+                        letterSpacing: 1.2,
                       ),
-                    )),
+                    ),
+                  ),
+                ),
               );
             },
           );

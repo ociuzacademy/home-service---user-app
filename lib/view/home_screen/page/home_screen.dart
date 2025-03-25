@@ -9,10 +9,12 @@ class UserHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Home Service App',
+          'Home_Ease',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: const Color.fromARGB(255, 188, 205, 241),
@@ -53,87 +55,94 @@ class UserHomeScreen extends StatelessWidget {
               title: const Text('Home'),
               onTap: () {
                 Navigator.pop(context);
-                // Navigate to Home Screen if needed
               },
             ),
             ListTile(
               leading: const Icon(Icons.history),
               title: const Text('History'),
-              onTap: () {
-                // Navigate to History Screen
-              },
+              onTap: () {},
             ),
             ListTile(
               leading: const Icon(Icons.logout),
               title: const Text('Logout'),
               onTap: () {
                 Navigator.pop(context);
-                // Add logout logic here
               },
             ),
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
+      body: Container(
+        width: size.width,
+        height: size.height,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color.fromRGBO(230, 241, 255, 1), Color.fromRGBO(188, 205, 241, 1)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
 
-              // Welcome Text
-              const Text(
-                'Welcome Ardra !',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Color.fromRGBO(41, 107, 239, 1),
-                  letterSpacing: 1.2,
-                ),
-                textAlign: TextAlign.left,
-              ),
-              const SizedBox(height: 20),
-
-              // Carousel Slider
-              _buildCarouselSlider(),
-
-              const SizedBox(height: 20),
-
-              // Services List Header
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'Our Services',
+                // Welcome Text
+                const Text(
+                  'Your Home, Our Care!',
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: 28,
                     fontWeight: FontWeight.bold,
                     color: Color.fromRGBO(41, 107, 239, 1),
+                    letterSpacing: 1.2,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+                const SizedBox(height: 20),
+
+                // Carousel Slider
+                _buildCarouselSlider(size),
+
+                const SizedBox(height: 20),
+
+                // Services List Header
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    'Our Services',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromRGBO(41, 107, 239, 1),
+                    ),
                   ),
                 ),
-              ),
 
-              // Services Horizontal List
-              _buildServicesList(),
+                // Services Horizontal List
+                _buildServicesList(),
 
-              const SizedBox(height: 30),
-              const Text(
-                'Need instant help? Contact us now!',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
+                const SizedBox(height: 30),
+                const Text(
+                  'Need instant help? Contact us now!',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildCarouselSlider() {
+  Widget _buildCarouselSlider(Size size) {
     return CarouselSlider(
       options: CarouselOptions(
-        height: 300,
+        height: size.height * 0.4,
         autoPlay: true,
         enlargeCenterPage: true,
         viewportFraction: 0.8,
@@ -170,38 +179,13 @@ class UserHomeScreen extends StatelessWidget {
       future: categoryListService(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const Center(child: CircularProgressIndicator());
         }
-
         if (snapshot.hasError) {
-          return Center(
-            child: Column(
-              children: [
-                Image.asset('assets/images/bad request.jpg'),
-                Text(
-                  "Error: ${snapshot.error}",
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    // Retry logic
-                  },
-                  child: const Text('Retry'),
-                ),
-              ],
-            ),
-          );
+          return Center(child: Text("Error: ${snapshot.error}"));
         }
-
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(
-            child: Text("No service found"),
-          );
+          return const Center(child: Text("No service found"));
         }
 
         List<CategoryListModel> categories = snapshot.data!;
@@ -215,13 +199,11 @@ class UserHomeScreen extends StatelessWidget {
               return GestureDetector(
                 onTap: () {
                   Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    ServicesListPage(category_id: category.id.toString()),
-                              ),
-                            );
-                 
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ServicesListPage(category_id: category.id.toString()),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 150,
@@ -229,31 +211,13 @@ class UserHomeScreen extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(horizontal: 8.0),
                   padding: const EdgeInsets.all(12.0),
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [
-                        Color.fromRGBO(41, 107, 239, 1),
-                        Color.fromARGB(255, 135, 187, 247),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
+                    color: Colors.blueAccent,
                     borderRadius: BorderRadius.circular(12.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 4,
-                        offset: const Offset(2, 2),
-                      ),
-                    ],
                   ),
                   child: Center(
                     child: Text(
                       category.category!,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                      style: const TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
