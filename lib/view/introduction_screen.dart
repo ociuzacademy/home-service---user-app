@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:home_ease/utils/preference_value.dart';
 import 'package:home_ease/view/login/page/login.dart';
-
 
 class OnboardingPage1 extends StatelessWidget {
   const OnboardingPage1({super.key});
@@ -9,31 +9,34 @@ class OnboardingPage1 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: OnboardingPagePresenter(pages: [
-   OnboardingPageModel(
-    title: 'Power Up Your Home Safely!',
-    description: 'Skilled electricians for wiring, repairs, installations, and emergency fixes.',
-    imageUrl: 'assets/images/home_intro1.jpg', // Replace with a relevant image
-    bgColor:  Color.fromARGB(255, 210, 240, 242),
-    subtitle: const Color.fromARGB(255, 39, 37, 37),
-  ),
-  OnboardingPageModel(
-    title: 'Crafting Perfection\n  for Your Home!',
-    description: 'Custom furniture, woodwork repairs, and installation by skilled carpenters.',
-    imageUrl: 'assets/images/home_intro2.jpg', // Replace with a jewelry-related image
-    bgColor:  Color.fromARGB(255, 248, 223, 235),
-    subtitle: const Color.fromARGB(255, 42, 40, 42),
-  ),
- 
-  OnboardingPageModel(
-    title: 'A Sparkling Home, Effortlessly!',
-    description: 'Professional home, office, and deep cleaning services to keep your space fresh and tidy.',
-    imageUrl: 'assets/images/home_intro3.jpg', // Replace with a jewelry showcase image
-    bgColor: const Color.fromARGB(255, 247, 249, 249),
-     subtitle: const Color.fromARGB(255, 29, 28, 28),
-  ),
-  
-]),
-
+        OnboardingPageModel(
+          title: 'Power Up Your Home Safely!',
+          description:
+              'Skilled electricians for wiring, repairs, installations, and emergency fixes.',
+          imageUrl:
+              'assets/images/home_intro1.jpg', // Replace with a relevant image
+          bgColor: Color.fromARGB(255, 210, 240, 242),
+          subtitle: const Color.fromARGB(255, 39, 37, 37),
+        ),
+        OnboardingPageModel(
+          title: 'Crafting Perfection\n  for Your Home!',
+          description:
+              'Custom furniture, woodwork repairs, and installation by skilled carpenters.',
+          imageUrl:
+              'assets/images/home_intro2.jpg', // Replace with a jewelry-related image
+          bgColor: Color.fromARGB(255, 248, 223, 235),
+          subtitle: const Color.fromARGB(255, 42, 40, 42),
+        ),
+        OnboardingPageModel(
+          title: 'A Sparkling Home, Effortlessly!',
+          description:
+              'Professional home, office, and deep cleaning services to keep your space fresh and tidy.',
+          imageUrl:
+              'assets/images/home_intro3.jpg', // Replace with a jewelry showcase image
+          bgColor: const Color.fromARGB(255, 247, 249, 249),
+          subtitle: const Color.fromARGB(255, 29, 28, 28),
+        ),
+      ]),
     );
   }
 }
@@ -100,7 +103,8 @@ class _OnboardingPageState extends State<OnboardingPagePresenter> {
                                         .titleLarge
                                         ?.copyWith(
                                           fontWeight: FontWeight.bold,
-                                          color: item.textColor,fontSize: 25,
+                                          color: item.textColor,
+                                          fontSize: 25,
                                         )),
                               ),
                               Container(
@@ -151,37 +155,47 @@ class _OnboardingPageState extends State<OnboardingPagePresenter> {
                     TextButton(
                         style: TextButton.styleFrom(
                             visualDensity: VisualDensity.comfortable,
-                            foregroundColor:  Color.fromRGBO(43, 13, 65, 1.0),
+                            foregroundColor: Color.fromRGBO(43, 13, 65, 1.0),
                             textStyle: const TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold)),
-                        onPressed: () {
-                          //widget.onSkip?.call(); 
-                          Navigator.push(context,
+                        onPressed: () async {
+                          // Disable the intro screen
+                          await PreferenceValues.disableIntroScreen();
+
+                          // Navigate to the LoginPage
+                          Navigator.pushReplacement(
+                            context,
                             MaterialPageRoute(
-                              builder: (context) => UserLoginPage(),
+                              builder: (context) => const UserLoginPage(),
                             ),
                           );
-
                         },
                         child: const Text("SKIP")),
                     TextButton(
                       style: TextButton.styleFrom(
                           visualDensity: VisualDensity.comfortable,
-                          foregroundColor:  Color.fromRGBO(43, 13, 65, 1.0),
+                          foregroundColor: Color.fromRGBO(43, 13, 65, 1.0),
                           textStyle: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
-                      onPressed: () {
+                      onPressed: () async {
                         if (_currentPage == widget.pages.length - 1) {
-                          //widget.onFinish?.call();
-                           Navigator.push(context,
+                          // Disable the intro screen
+                          await PreferenceValues.disableIntroScreen();
+
+                          // Navigate to the UserLoginPage
+                          Navigator.pushReplacement(
+                            context,
                             MaterialPageRoute(
-                              builder: (context) => UserLoginPage(),
+                              builder: (context) => const UserLoginPage(),
                             ),
                           );
                         } else {
-                          _pageController.animateToPage(_currentPage + 1,
-                              curve: Curves.easeInOutCubic,
-                              duration: const Duration(milliseconds: 250));
+                          // Go to the next page
+                          _pageController.animateToPage(
+                            _currentPage + 1,
+                            curve: Curves.easeInOutCubic,
+                            duration: const Duration(milliseconds: 250),
+                          );
                         }
                       },
                       child: Row(
@@ -223,5 +237,5 @@ class OnboardingPageModel {
       required this.imageUrl,
       this.bgColor = Colors.blue,
       this.textColor = const Color.fromARGB(255, 244, 49, 20),
-      this.subtitle =Colors.black});
+      this.subtitle = Colors.black});
 }

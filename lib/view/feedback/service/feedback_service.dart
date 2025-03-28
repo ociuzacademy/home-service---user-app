@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:home_ease/constants/ursls.dart';
+import 'package:home_ease/utils/preference_value.dart';
 import 'package:home_ease/view/feedback/model/feedback_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -10,8 +11,10 @@ Future<FeedbackModel> userFeedbackService({
   required String booking_id,
 }) async {
   try {
+
+     String userId = await PreferenceValues.getUserId();
     Map<String, dynamic> param = {
-      "user_id": '7',
+      "user_id": userId,
       "rating": rating,
       "review_text" :feedback,
       "booking_id" :booking_id,

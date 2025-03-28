@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:home_ease/utils/preference_value.dart';
+import 'package:home_ease/view/login/page/login.dart';
 import 'package:home_ease/view/service_provider_list/page/location%20access.dart';
 import 'package:home_ease/view/profile/service/profile_service.dart';
-
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -18,7 +19,7 @@ class ProfilePage extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor:  Colors.blueAccent,
+        backgroundColor: Colors.blueAccent,
         automaticallyImplyLeading: false,
       ),
       body: FutureBuilder(
@@ -40,7 +41,8 @@ class ProfilePage extends StatelessWidget {
                   const SizedBox(height: 10),
                   Text(
                     "Error: ${snapshot.error}",
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -67,7 +69,8 @@ class ProfilePage extends StatelessWidget {
                 const SizedBox(height: 20),
                 Text(
                   userProfile.username ?? "No Name",
-                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 22, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
                 Card(
@@ -78,7 +81,8 @@ class ProfilePage extends StatelessWidget {
                 ),
                 Card(
                   child: ListTile(
-                    leading: const Icon(Icons.location_history, color: Colors.blueAccent),
+                    leading: const Icon(Icons.location_history,
+                        color: Colors.blueAccent),
                     title: Text(userProfile.address ?? "Address"),
                   ),
                 ),
@@ -89,38 +93,62 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20), // Add spacing
-               // Feedback Button
-                // SizedBox(
-                //   width: double.infinity, // Make the button full width
-                //   child: ElevatedButton(
-                //     onPressed: () {
-                //       // Handle feedback button press
-                //       Navigator.push(
-                //                       context,
-                //                       MaterialPageRoute(
-                //                         builder: (context) =>
-                //                              GeolocatorRepairPage(),
-                //                       ),
-                //                     );
-
-                //     },
-                //     style: ElevatedButton.styleFrom(
-                //       backgroundColor: const Color.fromARGB(255, 100, 4, 117), // Purple color
-                //       padding: const EdgeInsets.symmetric(vertical: 16), // Add padding
-                //       shape: RoundedRectangleBorder(
-                //         borderRadius: BorderRadius.circular(8), // Rounded corners
-                //       ),
-                //     ),
-                //     child: const Text(
-                //       "Give Feedback",
-                //       style: TextStyle(
-                //         color: Colors.white,
-                //         fontSize: 16,
-                //         fontWeight: FontWeight.bold,
-                //       ),
-                //     ),
-                //   ),
-                // ),
+                SizedBox(
+                  width: double.infinity, // Make the button full width
+                  child: TextButton(
+                    onPressed: () {
+                      // Handle logout action
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("Logout"),
+                            content:
+                                const Text("Are you sure you want to logout?"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // Close dialog
+                                },
+                                child: const Text("Cancel"),
+                              ),
+                              TextButton(
+                                     onPressed: () async {
+                                  await PreferenceValues.userLogout();
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const UserLoginPage()),
+                                  );
+                                },
+                                    child: const Text("Logout"),
+                                  ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(
+                          255, 53, 123, 220), // Red color for logout
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16), // Add padding
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(8), // Rounded corners
+                      ),
+                    ),
+                    child: const Text(
+                      "Logout",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           );
@@ -128,6 +156,4 @@ class ProfilePage extends StatelessWidget {
       ),
     );
   }
-
-  
 }

@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:home_ease/constants/ursls.dart';
+import 'package:home_ease/utils/preference_value.dart';
 import 'package:home_ease/view/all_history/model/service_history_model.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<ServiceHistoryModel>> historyService() async {
   try {
+     String userId = await PreferenceValues.getUserId();
     Map<String, dynamic> params = {
-      'user_id': 7.toString(),
+      'user_id': userId,
     };
 
     final resp = await http.get(

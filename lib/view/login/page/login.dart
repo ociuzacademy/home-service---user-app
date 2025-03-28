@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:home_ease/utils/preference_value.dart';
 import 'package:home_ease/view/home.dart';
 import 'package:home_ease/view/login/service/login_service.dart';
 import 'package:home_ease/view/register/page/register.dart';
@@ -33,6 +34,8 @@ class _UserLoginPageState extends State<UserLoginPage> {
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
         );
+
+        await PreferenceValues.userLogin(userId: responseMessage.userId!.toString());
 
         if (responseMessage.status == 'success') {
           ScaffoldMessenger.of(context).showSnackBar(

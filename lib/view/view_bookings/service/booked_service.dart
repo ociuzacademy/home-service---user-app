@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:home_ease/constants/ursls.dart';
+import 'package:home_ease/utils/preference_value.dart';
 //import 'package:home_ease/utils/preference_value.dart';
 import 'package:home_ease/view/view_bookings/model/booked_model.dart';
 import 'package:http/http.dart' as http;
@@ -10,10 +11,10 @@ Future<List<BookedServiceModel>> bookedlistService(
   
 ) async {
   try {
-     //String userId = await PreferenceValues.getUserId();
+     String userId = await PreferenceValues.getUserId();
     Map<String, dynamic> params = {
-      //'user_id':userId.toString(),
-      'user_id':7.toString(),
+      'user_id':userId,
+      //'user_id':7.toString(),
     };
     final resp = await http.get(
       Uri.parse(UserUrl.view_bookings)

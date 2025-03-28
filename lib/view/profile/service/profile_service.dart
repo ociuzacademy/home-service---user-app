@@ -1,17 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:home_ease/constants/ursls.dart';
+import 'package:home_ease/utils/preference_value.dart';
 import 'package:home_ease/view/profile/model/profile_model.dart';
 import 'package:http/http.dart' as http;
 
 Future<UserProfileModel> userProfileService() async {
   try {
     //final user_id =int.parse("2");
-   // String userId = await PreferenceValues.getUserId();
+    String userId = await PreferenceValues.getUserId();
 
     Map<String, dynamic> params = {
-      //'id': userId.toString(),
-      'id' : 7.toString(),
+      'id': userId,
+      //'id' : 7.toString(),
     };
 
     final resp = await http.get(
