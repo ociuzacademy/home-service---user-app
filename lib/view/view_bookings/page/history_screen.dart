@@ -107,16 +107,20 @@ class BookingScreen extends StatelessWidget {
             );
           }
 
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(
-              child: Text(
-                "No services found",
-                style: TextStyle(
-                  fontSize: screenWidth * 0.04, // Responsive font size
-                ),
-              ),
-            );
-          }
+         if (!snapshot.hasData || snapshot.data!.isEmpty) {
+  return Center(
+    child: Text(
+      "No services booked at this time",
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontSize: MediaQuery.of(context).size.width * 0.04, // Responsive font size
+        fontWeight: FontWeight.w500, // Medium weight for better readability
+        color: Colors.grey[700], // Slightly darker color for contrast
+      ),
+    ),
+  );
+}
+
 
           final bookings = snapshot.data!;
 

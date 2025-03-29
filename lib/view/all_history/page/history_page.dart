@@ -10,6 +10,7 @@ class HistoryPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Booking History'),
+         backgroundColor: Colors.blueAccent,
       ),
       body: FutureBuilder<List<ServiceHistoryModel>>(
         future: historyService(), // Ensure this function returns Future<List<ServiceHistoryModel>>
@@ -43,10 +44,19 @@ class HistoryPage extends StatelessWidget {
           }
 
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(
-              child: Text("No service found"),
-            );
-          }
+  return const Center(
+    child: Text(
+      "Book your service for viewing history",
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontSize: 16.0,
+        fontWeight: FontWeight.bold,
+        color: Colors.blueGrey,
+      ),
+    ),
+  );
+}
+
 
           final items = snapshot.data!;
           return ListView.builder(
