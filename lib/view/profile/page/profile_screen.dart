@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:home_ease/utils/preference_value.dart';
+import 'package:home_ease/view/edit_profile/page/edit_profile_page.dart';
 import 'package:home_ease/view/login/page/login.dart';
-import 'package:home_ease/view/service_provider_list/page/location%20access.dart';
 import 'package:home_ease/view/profile/service/profile_service.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -62,10 +62,24 @@ class ProfilePage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const CircleAvatar(
-                  radius: 50,
-                  backgroundImage: AssetImage("assets/images/profile.jpg"),
-                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(builder: (context) => EditProfilePage()), // Replace with your target page
+                //     );
+                //   },
+                //   child: CircleAvatar(
+                //     radius: 50,
+                //     backgroundColor: Colors.grey[300],
+                //     child: Icon(
+                //       Icons.edit, // Edit profile icon
+                //       size: 30,
+                //       color: Colors.black,
+                //     ),
+                //   ),
+                // ),
+
                 const SizedBox(height: 20),
                 Text(
                   userProfile.username ?? "No Name",
@@ -92,6 +106,42 @@ class ProfilePage extends StatelessWidget {
                     title: Text(userProfile.phone ?? "No Phone Number"),
                   ),
                 ),
+                SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EditProfilePage()),
+                    );
+                  },
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CircleAvatar(
+                        radius: 25,
+                        backgroundColor:
+                            const Color.fromARGB(255, 208, 235, 247),
+                        child: Icon(
+                          Icons.edit,
+                          size: 30,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        'Edit',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
                 const SizedBox(height: 20), // Add spacing
                 SizedBox(
                   width: double.infinity, // Make the button full width
@@ -113,7 +163,7 @@ class ProfilePage extends StatelessWidget {
                                 child: const Text("Cancel"),
                               ),
                               TextButton(
-                                     onPressed: () async {
+                                onPressed: () async {
                                   await PreferenceValues.userLogout();
                                   Navigator.pushReplacement(
                                     context,
@@ -122,8 +172,8 @@ class ProfilePage extends StatelessWidget {
                                             const UserLoginPage()),
                                   );
                                 },
-                                    child: const Text("Logout"),
-                                  ),
+                                child: const Text("Logout"),
+                              ),
                             ],
                           );
                         },

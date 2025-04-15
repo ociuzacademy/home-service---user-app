@@ -21,6 +21,7 @@ class UserUrl {
   static const String cardpayment="$userbaseUrl/card_payment/";
   static const String history="$userbaseUrl/user_booking_history/";
   static const String feedback="$userbaseUrl/reviews/";
+  static const String editprofile="$userbaseUrl/update_profile/";
   
   
 
