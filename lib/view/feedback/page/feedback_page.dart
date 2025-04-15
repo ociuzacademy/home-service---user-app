@@ -58,7 +58,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
       appBar: AppBar(
         title: const Text("Feedback", style: TextStyle(color: Colors.white)),
         centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 33, 132, 31),
+        backgroundColor: Color.fromARGB(255, 69, 103, 217),
         elevation: 10,
       ),
       body: Container(
@@ -121,7 +121,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 56, 195, 93)),
+                      color: Color.fromARGB(255, 66, 105, 203)),
                 ),
                 const SizedBox(height: 10),
                 Container(
@@ -130,7 +130,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color.fromARGB(255, 72, 144, 71).withOpacity(0.1),
+                        color: const Color.fromARGB(255, 79, 114, 171).withOpacity(0.1),
                         blurRadius: 10,
                         offset: const Offset(0, 5),
                       ),
@@ -163,14 +163,14 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 6, 106, 67),
+                      backgroundColor: const Color.fromARGB(255, 59, 73, 180),
                       padding: const EdgeInsets.symmetric(
                           horizontal: 40, vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
                       elevation: 5,
-                      shadowColor: Colors.deepPurple.withOpacity(0.5),
+                      shadowColor: const Color.fromARGB(255, 68, 108, 182).withOpacity(0.5),
                     ),
                     child: const Text(
                       "Submit Feedback",
