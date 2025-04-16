@@ -4,8 +4,27 @@ import 'package:home_ease/view/edit_profile/page/edit_profile_page.dart';
 import 'package:home_ease/view/login/page/login.dart';
 import 'package:home_ease/view/profile/service/profile_service.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  late Future userProfileFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    userProfileFuture = userProfileService();
+  }
+
+  Future<void> _refreshProfile() async {
+    setState(() {
+      userProfileFuture = userProfileService();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,74 +32,61 @@ class ProfilePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           "Profile",
-          style: TextStyle(color: Colors.black,fontSize: 19,fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: Colors.black, fontSize: 19, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.blueAccent,
         automaticallyImplyLeading: false,
       ),
-      body: FutureBuilder(
-        future: userProfileService(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+      body: RefreshIndicator(
+        onRefresh: _refreshProfile,
+        child: FutureBuilder(
+          future: userProfileFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
 
-          // Error State
-          if (snapshot.hasError) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+            if (snapshot.hasError) {
+              return ListView(
                 children: [
-                  Image.asset('assets/images/bad request.jpg', height: 200),
-                  const SizedBox(height: 10),
-                  Text(
-                    "Error: ${snapshot.error}",
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
+                  SizedBox(height: 100),
+                  Center(
+                    child: Column(
+                      children: [
+                        Image.asset('assets/images/bad request.jpg', height: 200),
+                        const SizedBox(height: 10),
+                        Text(
+                          "Error: ${snapshot.error}",
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
-              ),
-            );
-          }
+              );
+            }
 
-          if (!snapshot.hasData || snapshot.data == null) {
-            return const Center(child: Text("No user profile found"));
-          }
+            if (!snapshot.hasData || snapshot.data == null) {
+              return const Center(child: Text("No user profile found"));
+            }
 
-          // Extract data
-          final userProfile = snapshot.data!;
+            final userProfile = snapshot.data!;
 
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+            return ListView(
+              padding: const EdgeInsets.all(16.0),
               children: [
-                // GestureDetector(
-                //   onTap: () {
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(builder: (context) => EditProfilePage()), // Replace with your target page
-                //     );
-                //   },
-                //   child: CircleAvatar(
-                //     radius: 50,
-                //     backgroundColor: Colors.grey[300],
-                //     child: Icon(
-                //       Icons.edit, // Edit profile icon
-                //       size: 30,
-                //       color: Colors.black,
-                //     ),
-                //   ),
-                // ),
-
                 const SizedBox(height: 20),
-                Text(
-                  userProfile.username ?? "No Name",
-                  style: const TextStyle(
-                      fontSize: 22, fontWeight: FontWeight.bold),
+                Center(
+                  child: Text(
+                    userProfile.username ?? "No Name",
+                    style: const TextStyle(
+                        fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Card(
@@ -91,8 +97,8 @@ class ProfilePage extends StatelessWidget {
                 ),
                 Card(
                   child: ListTile(
-                    leading: const Icon(Icons.location_history,
-                        color: Colors.blueAccent),
+                    leading:
+                        const Icon(Icons.location_history, color: Colors.blueAccent),
                     title: Text(userProfile.address ?? "Address"),
                   ),
                 ),
@@ -102,16 +108,13 @@ class ProfilePage extends StatelessWidget {
                     title: Text(userProfile.phone ?? "No Phone Number"),
                   ),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => EditProfilePage()),
-                    );
+                      MaterialPageRoute(builder: (context) => EditProfilePage()),
+                    ).then((_) => _refreshProfile());
                   },
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -120,14 +123,14 @@ class ProfilePage extends StatelessWidget {
                         radius: 25,
                         backgroundColor:
                             const Color.fromARGB(255, 208, 235, 247),
-                        child: Icon(
+                        child: const Icon(
                           Icons.edit,
                           size: 30,
                           color: Colors.black,
                         ),
                       ),
-                      SizedBox(height: 4),
-                      Text(
+                      const SizedBox(height: 4),
+                      const Text(
                         'Edit',
                         style: TextStyle(
                           fontSize: 12,
@@ -137,13 +140,11 @@ class ProfilePage extends StatelessWidget {
                     ],
                   ),
                 ),
-
-                const SizedBox(height: 20), // Add spacing
+                const SizedBox(height: 20),
                 SizedBox(
-                  width: double.infinity, // Make the button full width
+                  width: double.infinity,
                   child: TextButton(
                     onPressed: () {
-                      // Handle logout action
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -154,7 +155,7 @@ class ProfilePage extends StatelessWidget {
                             actions: [
                               TextButton(
                                 onPressed: () {
-                                  Navigator.of(context).pop(); // Close dialog
+                                  Navigator.of(context).pop();
                                 },
                                 child: const Text("Cancel"),
                               ),
@@ -176,13 +177,11 @@ class ProfilePage extends StatelessWidget {
                       );
                     },
                     style: TextButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(
-                          255, 53, 123, 220), // Red color for logout
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 16), // Add padding
+                      backgroundColor:
+                          const Color.fromARGB(255, 53, 123, 220),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(8), // Rounded corners
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                     child: const Text(
@@ -196,9 +195,9 @@ class ProfilePage extends StatelessWidget {
                   ),
                 )
               ],
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

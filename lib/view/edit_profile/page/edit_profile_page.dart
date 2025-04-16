@@ -24,7 +24,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
   );
   final RegExp phoneRegex = RegExp(r'^[0-9]{10,15}$');
-  final RegExp passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6}$');
+  final RegExp passwordRegex = RegExp(r'^[A-Za-z\d]{1,6}$');
 
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) {
@@ -102,9 +102,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
               ),
               SizedBox(height: 20),
-              _buildTextField("Username", usernameController),
+              _buildTextField("Username", usernameController, isRequired: true),
               _buildEmailField(),
-              _buildTextField("Address", addressController),
+              _buildTextField("Address", addressController, isRequired: false),
               _buildPasswordField(),
               _buildPhoneField(),
               SizedBox(height: 20),
@@ -126,14 +126,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Widget _buildTextField(String label, TextEditingController controller,
-      {bool obscureText = false}) {
+      {bool obscureText = false, required bool isRequired}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: TextFormField(
         controller: controller,
         obscureText: obscureText,
         decoration: InputDecoration(
-          labelText: label,
+          labelText: label + (isRequired ? '' : ' (Optional)'),
           labelStyle: TextStyle(color: Colors.blueAccent),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.blueAccent),
@@ -143,7 +143,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ),
         ),
         validator: (value) {
-          if (value == null || value.isEmpty) {
+          if (isRequired && (value == null || value.isEmpty)) {
             return 'Please enter $label';
           }
           return null;
@@ -188,7 +188,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         controller: phoneController,
         keyboardType: TextInputType.phone,
         decoration: InputDecoration(
-          labelText: 'Phone Number',
+          labelText: 'Phone Number (Optional)',
           labelStyle: TextStyle(color: Colors.blueAccent),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.blueAccent),
@@ -203,7 +203,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ),
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please enter your phone number';
+            return null; // Optional
           }
           if (!phoneRegex.hasMatch(value)) {
             return 'Please enter a valid phone number (10-15 digits)';
@@ -231,7 +231,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ),
           suffixIcon: IconButton(
             icon: Icon(
-              _obscurePassword ? Icons.visibility : Icons.visibility_off,
+              _obscurePassword ? Icons.visibility_off : Icons.visibility,
               color: Colors.blueAccent,
             ),
             onPressed: () {
@@ -246,8 +246,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
             return 'Please enter your password';
           }
           if (!passwordRegex.hasMatch(value)) {
-            return 'Password must be exactly 6 characters and contain both letters and numbers';
+            return 'Password must be up to 6 characters (letters or digits only)';
           }
+
           return null;
         },
       ),
