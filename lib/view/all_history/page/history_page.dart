@@ -9,11 +9,12 @@ class HistoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Booking History'),
-         backgroundColor: Colors.blueAccent,
+        title: const Text('Booking History',
+        style: TextStyle(color: Colors.black,fontSize: 19,fontWeight: FontWeight.bold),),
+        backgroundColor: Colors.blueAccent,
       ),
       body: FutureBuilder<List<ServiceHistoryModel>>(
-        future: historyService(), // Ensure this function returns Future<List<ServiceHistoryModel>>
+        future: historyService(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -27,7 +28,7 @@ class HistoryPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
-                    'assets/images/bad request.jpg', // Ensure the image path is correct
+                    'assets/images/bad_request.jpg',
                     width: 300,
                   ),
                   Text(
@@ -44,19 +45,18 @@ class HistoryPage extends StatelessWidget {
           }
 
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-  return const Center(
-    child: Text(
-      "Book your service for viewing history",
-      textAlign: TextAlign.center,
-      style: TextStyle(
-        fontSize: 16.0,
-        fontWeight: FontWeight.bold,
-        color: Colors.blueGrey,
-      ),
-    ),
-  );
-}
-
+            return const Center(
+              child: Text(
+                "Book your service for viewing history",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueGrey,
+                ),
+              ),
+            );
+          }
 
           final items = snapshot.data!;
           return ListView.builder(
@@ -65,45 +65,39 @@ class HistoryPage extends StatelessWidget {
               final booking = items[index];
               final serviceDetails = booking.serviceDetails;
               return Card(
-                margin: EdgeInsets.all(8.0),
-                child: ListTile(
-                  title: Text(
-                    serviceDetails?.serviceName?.toString() ?? 'No Service Name',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Column(
+                margin: const EdgeInsets.all(8.0),
+                elevation: 2,
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 4),
                       Text(
-                        'Date: ${booking.bookingDate?.toIso8601String().split('T')[0] ?? 'No Date'}',
-                        style: TextStyle(fontSize: 14),
+                        serviceDetails.serviceName,
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 4),
-                      Text(
-                        'Time: ${booking.slotStartTime ?? 'No Start Time'} - ${booking.slotEndTime ?? 'No End Time'}',
-                        style: TextStyle(fontSize: 14),
+                      const SizedBox(height: 8),
+                      _buildInfoRow(Icons.calendar_today,
+                          'Date: ${_formatDate(booking.bookingDate)}'),
+                      const SizedBox(height: 4),
+                      _buildInfoRow(
+                          Icons.access_time,
+                          'Time: ${booking.slotStartTime} - ${booking.slotEndTime}'),
+                      const SizedBox(height: 4),
+                      _buildInfoRow(
+                        Icons.info,
+                        'Status: ${booking.status}',
+                        color: booking.status.toLowerCase() == 'paid'
+                            ? Colors.green
+                            : Colors.orange,
                       ),
-                      SizedBox(height: 4),
-                      Text(
-                        'Status: ${booking.status?.toString() ?? 'No Status'}',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: booking.status == Status.PAID
-                              ? Colors.green
-                              : Colors.red,
-                        ),
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        'Price: ${serviceDetails?.price?.toStringAsFixed(2) ?? '0.00'}',
-                        style: TextStyle(fontSize: 14),
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        'Platform Fee: ${booking.platformFee ?? '0.00'}',
-                        style: TextStyle(fontSize: 14),
-                      ),
+                      const SizedBox(height: 4),
+                      _buildInfoRow(Icons.attach_money,
+                          'Price: ${serviceDetails.price.toStringAsFixed(2)}'),
+                      const SizedBox(height: 4),
+                      _buildInfoRow(Icons.money,
+                          'Platform Fee: ${booking.platformFee}'),
                     ],
                   ),
                 ),
@@ -113,5 +107,22 @@ class HistoryPage extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Widget _buildInfoRow(IconData icon, String text, {Color color = Colors.black}) {
+    return Row(
+      children: [
+        Icon(icon, size: 16, color: color),
+        const SizedBox(width: 8),
+        Text(
+          text,
+          style: TextStyle(fontSize: 14, color: color),
+        ),
+      ],
+    );
+  }
+
+  String _formatDate(DateTime date) {
+    return "${date.day}/${date.month}/${date.year}";
   }
 }

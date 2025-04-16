@@ -13,11 +13,7 @@ class ProfilePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           "Profile",
-          style: TextStyle(
-            color: Color.fromARGB(255, 245, 247, 247),
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.black,fontSize: 19,fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.blueAccent,
         automaticallyImplyLeading: false,

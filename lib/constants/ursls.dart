@@ -1,6 +1,6 @@
 class UserUrl {
   // Base URL for the API server 
-  static const String baseUrl="https://nkdz72g4-8002.inc1.devtunnels.ms/";
+  static const String baseUrl="https://fc20khdw-8000.inc1.devtunnels.ms/";
   static const String userbaseUrl="$baseUrl/user";
  
 

@@ -14,24 +14,24 @@ class UserHomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Home_Ease',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          'LazyClean',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize:25),
         ),
         backgroundColor: const Color.fromARGB(255, 188, 205, 241),
         elevation: 4,
-        leading: IconButton(
-          icon: const Icon(Icons.menu, color: Colors.white),
-          onPressed: () => Scaffold.of(context).openDrawer(),
-        ),
+        // leading: IconButton(
+        //   icon: const Icon(Icons.menu, color: Colors.white),
+        //   onPressed: () => Scaffold.of(context).openDrawer(),
+        // ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('No new notifications')),
-              );
-            },
-          ),
+          // IconButton(
+          //   icon: const Icon(Icons.notifications, color: Colors.white),
+          //   onPressed: () {
+          //     ScaffoldMessenger.of(context).showSnackBar(
+          //       const SnackBar(content: Text('No new notifications')),
+          //     );
+          //   },
+          // ),
         ],
       ),
       // drawer: Drawer(
@@ -125,7 +125,7 @@ class UserHomeScreen extends StatelessWidget {
 
                 const SizedBox(height: 30),
                 const Text(
-                  'Need instant help? Contact us now!',
+                  'We just make it easier.!',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.grey,

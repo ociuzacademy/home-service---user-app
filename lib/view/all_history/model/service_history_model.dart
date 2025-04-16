@@ -8,102 +8,77 @@ String serviceHistoryModelToJson(List<ServiceHistoryModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class ServiceHistoryModel {
-  int? id;
-  ServiceDetails? serviceDetails;
-  String? slotStartTime;
-  String? platformFee;
-  String? slotEndTime;
-  DateTime? bookingDate;
-  Status? status;
+  int id;
+  ServiceDetails serviceDetails;
+  String slotStartTime;
+  String slotEndTime;
+  String platformFee;
+  DateTime bookingDate;
+  String status;
 
   ServiceHistoryModel({
-    this.id,
-    this.serviceDetails,
-    this.slotStartTime,
-    this.platformFee,
-    this.slotEndTime,
-    this.bookingDate,
-    this.status,
-  });
+    this.id = 0,
+    ServiceDetails? serviceDetails,
+    this.slotStartTime = '',
+    this.slotEndTime = '',
+    this.platformFee = '0.00',
+    DateTime? bookingDate,
+    this.status = '',
+  })  : serviceDetails = serviceDetails ?? ServiceDetails(),
+        bookingDate = bookingDate ?? DateTime.now();
 
   factory ServiceHistoryModel.fromJson(Map<String, dynamic> json) =>
       ServiceHistoryModel(
-        id: json["id"],
+        id: json["id"] ?? 0,
         serviceDetails: json["service_details"] == null
-            ? null
+            ? ServiceDetails()
             : ServiceDetails.fromJson(json["service_details"]),
-        slotStartTime: json["slot_start_time"],
-        platformFee: json["platform_fee"],
-        slotEndTime: json["slot_end_time"],
+        slotStartTime: json["slot_start_time"] ?? '',
+        slotEndTime: json["slot_end_time"] ?? '',
+        platformFee: json["platform_fee"] ?? '0.00',
         bookingDate: json["booking_date"] == null
-            ? null
+            ? DateTime.now()
             : DateTime.parse(json["booking_date"]),
-        status: statusValues.map[json["status"]]!,
+        status: json["status"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "service_details": serviceDetails?.toJson(),
+        "service_details": serviceDetails.toJson(),
         "slot_start_time": slotStartTime,
-        "platform_fee": platformFee,
         "slot_end_time": slotEndTime,
-        "booking_date": bookingDate?.toIso8601String(),
-        "status": statusValues.reverse[status],
+        "platform_fee": platformFee,
+        "booking_date": bookingDate.toIso8601String(),
+        "status": status,
       };
 }
 
 class ServiceDetails {
-  int? id;
-  int? serviceId;
-  ServiceName? serviceName;
-  int? price;
+  int id;
+  int serviceId;
+  String serviceName;
+  double price;
 
   ServiceDetails({
-    this.id,
-    this.serviceId,
-    this.serviceName,
-    this.price,
+    this.id = 0,
+    this.serviceId = 0,
+    this.serviceName = '',
+    this.price = 0.0,
   });
 
   factory ServiceDetails.fromJson(Map<String, dynamic> json) => ServiceDetails(
-        id: json["id"],
-        serviceId: json["service_id"],
-        serviceName: serviceNameValues.map[json["service_name"]]!,
-        // ✅ Handling double or int properly
-        price: (json["price"] is double)
-            ? (json["price"] as double).toInt()
-            : json["price"],
+        id: json["id"] ?? 0,
+        serviceId: json["service_id"] ?? 0,
+        serviceName: json["service_name"] ?? '',
+        price: (json["price"] is int)
+            ? (json["price"] as int).toDouble()
+            : json["price"]?.toDouble() ?? 0.0,
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "service_id": serviceId,
-        "service_name": serviceNameValues.reverse[serviceName],
+        "service_name": serviceName,
         "price": price,
       };
-}
-
-enum ServiceName { DRAIN_CLEANING }
-
-final serviceNameValues = EnumValues({
-  "Drain Cleaning": ServiceName.DRAIN_CLEANING,
-});
-
-enum Status { NOT_ARRIVED, PAID }
-
-final statusValues = EnumValues({
-  "not arrived": Status.NOT_ARRIVED,
-  "paid": Status.PAID,
-});
-
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
 }
